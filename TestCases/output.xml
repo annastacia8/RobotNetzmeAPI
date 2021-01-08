@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.2.2 (Python 3.6.4 on darwin)" generated="20201230 11:38:14.698" rpa="false">
+<suite id="s1" name="Payment QRIS" source="/Users/annastaciapriyatna/pythonProject/TestCases/Payment_QRIS.robot">
+<test id="s1-t1" name="PaymentQris">
+<kw name="Get HMAC From Python">
+<kw name="Get Hmac" library="hmac_gen">
+<arguments>
+<arg>${body}</arg>
+</arguments>
+<assign>
+<var>${HMAC}</var>
+</assign>
+<msg timestamp="20201230 11:38:15.581" level="INFO">${HMAC} = 765A3D87FE3FA8415393025B190D7996A2C3AFB656D30CB5B6C1056AA3A19EA5</msg>
+<status status="PASS" starttime="20201230 11:38:15.581" endtime="20201230 11:38:15.581"></status>
+</kw>
+<kw name="Set Global Variable" library="BuiltIn">
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<arguments>
+<arg>${GLOBALHMAC}</arg>
+<arg>${HMAC}</arg>
+</arguments>
+<msg timestamp="20201230 11:38:15.583" level="INFO">${GLOBALHMAC} = 765A3D87FE3FA8415393025B190D7996A2C3AFB656D30CB5B6C1056AA3A19EA5</msg>
+<status status="PASS" starttime="20201230 11:38:15.582" endtime="20201230 11:38:15.584"></status>
+</kw>
+<status status="PASS" starttime="20201230 11:38:15.580" endtime="20201230 11:38:15.584"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${GLOBALHMAC}</arg>
+</arguments>
+<status status="PASS" starttime="20201230 11:38:15.584" endtime="20201230 11:38:15.585"></status>
+</kw>
+<kw name="Create Session" library="RequestsLibrary">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>mysession</arg>
+<arg>${base_url}</arg>
+<arg>verify=true</arg>
+</arguments>
+<msg timestamp="20201230 11:38:15.585" level="INFO">Creating Session using : alias=mysession, url=https://tokoapi-stg.netzme.com/qr/payment, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<status status="PASS" starttime="20201230 11:38:15.585" endtime="20201230 11:38:15.586"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>mac=${GLOBALHMAC}</arg>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20201230 11:38:15.588" level="INFO">${headers} = {'mac': '765A3D87FE3FA8415393025B190D7996A2C3AFB656D30CB5B6C1056AA3A19EA5', 'Content-Type': 'application/json'}</msg>
+<status status="PASS" starttime="20201230 11:38:15.586" endtime="20201230 11:38:15.588"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary">
+<doc>Send a POST request on the session object found using the
+given `alias`</doc>
+<arguments>
+<arg>mysession</arg>
+<arg>/payment</arg>
+<arg>data=${body}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${response}</var>
+</assign>
+<msg timestamp="20201230 11:38:16.894" level="INFO">POST Request : url=https://tokoapi-stg.netzme.com/qr/payment/payment 
+ path_url=/qr/payment/payment 
+ headers={'User-Agent': 'python-requests/2.24.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'mac': '765A3D87FE3FA8415393025B190D7996A2C3AFB656D30CB5B6C1056AA3A19EA5', 'Content-Type': 'application/json', 'Content-Length': '646'} 
+ body="Create Dictionary pan=9360081401000000415 processingCode=260000 transactionAmount=4000 transmissionDateTime=20200924160000 systemTraceAuditNumber=123456 localTransactionDateTime=20200924160000 settlementDate=20202210 captureDate=20202210 merchantType=8111 posEntryMode=011 feeType=C feeAmount=0 acquirerId=93600814 issuerId=93600161 forwardingId=008 rrn=99905530098433 approvalCode=121212 terminalId=123456 merchantId=4sActhBS merchantName=Kreasi maju merchantCity=Jakarta Selatan merchantCountry=62 productIndicator=Q001 customerData=Yuhu merchantCriteria=URE currencyCode=360 postalCode=12910 additionalField=None customerPan=9360016187569790" 
+ </msg>
+<msg timestamp="20201230 11:38:16.894" level="INFO">POST Response : url=https://tokoapi-stg.netzme.com/qr/payment/payment 
+ status=404, reason=Not Found 
+ body=&lt;html&gt;&lt;body&gt;&lt;h1&gt;Resource not found&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt; 
+ </msg>
+<msg timestamp="20201230 11:38:16.895" level="INFO">${response} = &lt;Response [404]&gt;</msg>
+<status status="PASS" starttime="20201230 11:38:15.589" endtime="20201230 11:38:16.895"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${response.status_code}</arg>
+</arguments>
+<status status="PASS" starttime="20201230 11:38:16.895" endtime="20201230 11:38:16.896"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${response.content}</arg>
+</arguments>
+<status status="PASS" starttime="20201230 11:38:16.897" endtime="20201230 11:38:16.897"></status>
+</kw>
+<status status="PASS" starttime="20201230 11:38:15.578" endtime="20201230 11:38:16.898" critical="yes"></status>
+</test>
+<doc>PaymentQris</doc>
+<status status="PASS" starttime="20201230 11:38:14.707" endtime="20201230 11:38:16.899"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0">Critical Tests</stat>
+<stat pass="1" fail="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" id="s1" name="Payment QRIS">Payment QRIS</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
